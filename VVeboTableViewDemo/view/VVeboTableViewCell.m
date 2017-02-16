@@ -122,11 +122,18 @@
     NSInteger flag = drawColorFlag;
     drawed = YES;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+
         CGRect rect = [_data[@"frame"] CGRectValue];
+//开启图形上下文
         UIGraphicsBeginImageContextWithOptions(rect.size, YES, 0);
+//获取图形上下文
         CGContextRef context = UIGraphicsGetCurrentContext();
+//背景颜色
         [[UIColor colorWithRed:250/255.0 green:250/255.0 blue:250/255.0 alpha:1] set];
+//通过rect填充背景颜色
         CGContextFillRect(context, rect);
+       
         if ([_data valueForKey:@"subData"]) {
             [[UIColor colorWithRed:243/255.0 green:243/255.0 blue:243/255.0 alpha:1] set];
             CGRect subFrame = [_data[@"subData"][@"frame"] CGRectValue];
@@ -134,7 +141,7 @@
             [[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1] set];
             CGContextFillRect(context, CGRectMake(0, subFrame.origin.y, rect.size.width, .5));
         }
-        
+//NSString绘制 - name 和time
         {
             float leftX = SIZE_GAP_LEFT+SIZE_AVATAR+SIZE_GAP_BIG;
             float x = leftX;
@@ -150,7 +157,8 @@
                    andTextColor:[UIColor colorWithRed:178/255.0 green:178/255.0 blue:178/255.0 alpha:1]
                       andHeight:rect.size.height andWidth:size];
         }
-        
+
+//NSSting和image绘制 - comment
         {
             CGRect countRect = CGRectMake(0, rect.size.height-30, [UIScreen screenWidth], 30);
             [[UIColor colorWithRed:250/255.0 green:250/255.0 blue:250/255.0 alpha:1] set];
@@ -167,6 +175,7 @@
                                 andFont:FontWithSize(12)
                            andTextColor:[UIColor colorWithRed:178/255.0 green:178/255.0 blue:178/255.0 alpha:1]
                               andHeight:rect.size.height];
+//image绘制
                 [[UIImage imageNamed:@"t_comments.png"] drawInRect:CGRectMake(x-5, 10.5+countRect.origin.y, 10, 9) blendMode:kCGBlendModeNormal alpha:alpha];
                 commentsRect = CGRectMake(x-5, self.height-50, [UIScreen screenWidth]-x+5, 50);
                 x -= 20;
@@ -198,6 +207,7 @@
                 CGContextFillRect(context, CGRectMake(0, rect.size.height-30.5, rect.size.width, .5));
             }
         }
+//将整个context转化为图片，赋给背景imageview
         
         UIImage *temp = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -209,7 +219,9 @@
             }
         });
     });
+//绘制两个label的text
     [self drawText];
+//加载帖子里的网络图片，使用SDWebImage
     [self loadThumb];
 }
 
